@@ -85,6 +85,7 @@ internal sealed class AppHost : IDisposable
         Stats = new SystemStatsSource(dispatcher);
         TaskbarStats = new TaskbarStatsViewModel(Settings, Stats, OpenTaskManager);
         TaskbarStatsHost = new TaskbarStatsService(TaskbarStats, TaskbarTracker, TaskbarWidgetHost, dispatcher);
+        DisplayWake = new DisplayWakeWatcher(dispatcher);
     }
 
     public SettingsService Settings { get; }
@@ -128,6 +129,9 @@ internal sealed class AppHost : IDisposable
 
     internal TaskbarStatsService TaskbarStatsHost { get; }
 
+    /// <summary>Asks the taskbar windows to rebuild after waking from sleep or a display change.</summary>
+    internal DisplayWakeWatcher DisplayWake { get; }
+
     public void Start()
     {
         // Before anything reads the settings or the Run key: bring a user of the old NxtFlyout across.
@@ -153,6 +157,8 @@ internal sealed class AppHost : IDisposable
 
         TaskbarWidgetHost.Start();
         TaskbarStatsHost.Start();
+        DisplayWake.RebuildRequested += OnRebuildTaskbarWindows;
+        DisplayWake.Start();
         _ = StartMediaAsync();
 
         if (loadResult == SettingsLoadResult.CreatedDefaults)
@@ -209,6 +215,13 @@ internal sealed class AppHost : IDisposable
         }
     }
 
+    private void OnRebuildTaskbarWindows(object? sender, EventArgs e)
+    {
+        // Widget first: the stats panel places itself around the widget.
+        TaskbarWidgetHost.Rebuild();
+        TaskbarStatsHost.Rebuild();
+    }
+
     public void Dispose()
     {
         if (_disposed)
@@ -229,6 +242,8 @@ internal sealed class AppHost : IDisposable
         // Unhook first: the volume keys must work normally again the moment the app stops handling them.
         KeyboardHook.Dispose();
 
+        DisplayWake.RebuildRequested -= OnRebuildTaskbarWindows;
+        DisplayWake.Dispose();
         TaskbarStatsHost.Dispose();
         TaskbarStats.Dispose();
         Stats.Dispose();

@@ -73,6 +73,21 @@ internal sealed class TaskbarStatsService : IDisposable
         CloseWindow();
     }
 
+    /// <summary>
+    /// Replaces the panel's window with a fresh one. After the graphics are reset (waking from
+    /// sleep) a see-through window can turn solid gray until it is recreated.
+    /// </summary>
+    public void Rebuild()
+    {
+        if (!_started || _window is null)
+        {
+            return;
+        }
+
+        CloseWindow();
+        Update();
+    }
+
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(TaskbarStatsViewModel.IsVisible))

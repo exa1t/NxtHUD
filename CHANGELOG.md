@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1
+
+- **Fixed: the taskbar stats panel (and the music widget) turning into a gray box** after the
+  PC woke from sleep. Waking resets the graphics, and the see-through windows lost their
+  transparency until you toggled them. NxtHUD now rebuilds them on its own a couple of seconds
+  after the screen comes back on, and after display changes.
+
 ## 1.3.0
 
 - **NxtFlyout is now NxtHUD.** Same app, new name: the installer, the exe, the Start menu
