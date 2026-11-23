@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.Win32;
 using NxtHUD.Core.Services;
 
@@ -66,15 +67,17 @@ internal sealed class StartupService : IStartupService
     }
 
     /// <summary>
-    /// If the app is registered but was moved or updated to a new location, points the Run
-    /// entry at the executable that is running now.
+    /// If the app is registered but the registered copy no longer exists (it was moved), points
+    /// the Run entry at the executable that is running now. Another copy that still exists keeps
+    /// the entry; see <see cref="AutostartCommand.ShouldRepoint"/>.
     /// </summary>
     public void RefreshCommandIfRegistered()
     {
         using var runKey = Registry.CurrentUser.OpenSubKey(RunKeyPath, writable: true);
         if (runKey?.GetValue(_valueName) is string existing
-            && !string.Equals(existing, _command, StringComparison.OrdinalIgnoreCase))
+            && AutostartCommand.ShouldRepoint(existing, _command, File.Exists))
         {
+            Log.Info($"Start-with-Windows pointed at a missing copy ({existing}); pointing it at this one.");
             runKey.SetValue(_valueName, _command, RegistryValueKind.String);
         }
     }

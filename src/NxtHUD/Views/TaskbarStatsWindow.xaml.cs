@@ -76,6 +76,7 @@ public partial class TaskbarStatsWindow : Window
         // Never take focus, and stay out of Alt+Tab.
         var handle = new WindowInteropHelper(this).Handle;
         NativeMethods.AddExtendedStyles(handle, NativeMethods.WS_EX_NOACTIVATE | NativeMethods.WS_EX_TOOLWINDOW);
+        TaskbarWindowRendering.UseSoftware(handle);
     }
 
     /// <summary>

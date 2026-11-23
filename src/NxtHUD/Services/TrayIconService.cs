@@ -24,6 +24,9 @@ internal sealed class TrayIconService : IDisposable
     private readonly System.Drawing.Icon _icon;
     private readonly WinForms.NotifyIcon _notifyIcon;
     private ContextMenu? _menu;
+    private MenuItem? _updateItem;
+    private Separator? _updateSeparator;
+    private string? _updateVersion;
     private Window? _menuOwner;
     private bool _disposed;
 
@@ -37,6 +40,7 @@ internal sealed class TrayIconService : IDisposable
             Visible = false,
         };
         _notifyIcon.MouseUp += OnMouseUp;
+        _notifyIcon.BalloonTipClicked += OnBalloonTipClicked;
     }
 
     /// <summary>The user clicked the icon or chose "Settings".</summary>
@@ -45,7 +49,34 @@ internal sealed class TrayIconService : IDisposable
     /// <summary>The user chose "Quit".</summary>
     public event EventHandler? QuitRequested;
 
+    /// <summary>The user clicked the update notification or the update menu item.</summary>
+    public event EventHandler? UpdateRequested;
+
     public void Show() => _notifyIcon.Visible = true;
+
+    /// <summary>
+    /// Adds a "Download NxtHUD x" item to the menu while an update is available, or removes it
+    /// (null).
+    /// </summary>
+    public void SetAvailableUpdate(string? version)
+    {
+        _updateVersion = version;
+        if (_menu is not null && _updateItem is not null)
+        {
+            UpdateMenuItemState();
+        }
+    }
+
+    /// <summary>Shows a Windows notification saying a new version is out; clicking it raises <see cref="UpdateRequested"/>.</summary>
+    public void ShowUpdateNotice(string version)
+    {
+        var localizer = Localizer.Instance;
+        _notifyIcon.ShowBalloonTip(
+            10_000,
+            string.Format(localizer.Culture, localizer.Get("Tray_UpdateAvailable_Title"), version),
+            localizer.Get("Tray_UpdateAvailable_Text"),
+            WinForms.ToolTipIcon.Info);
+    }
 
     public void Dispose()
     {
@@ -57,6 +88,7 @@ internal sealed class TrayIconService : IDisposable
         _disposed = true;
 
         _notifyIcon.MouseUp -= OnMouseUp;
+        _notifyIcon.BalloonTipClicked -= OnBalloonTipClicked;
 
         // Hide before disposing, otherwise a ghost icon lingers until the mouse moves over it.
         _notifyIcon.Visible = false;
@@ -99,6 +131,7 @@ internal sealed class TrayIconService : IDisposable
     private void ShowMenu()
     {
         _menu ??= BuildMenu();
+        UpdateMenuItemState();
         _menuOwner ??= CreateMenuOwner();
 
         // A popup only closes when the user clicks elsewhere if its thread owns the foreground
@@ -116,15 +149,40 @@ internal sealed class TrayIconService : IDisposable
         var quitItem = CreateMenuItem("Tray_Quit", WpfUi.SymbolRegular.Dismiss24);
         quitItem.Click += (_, _) => QuitRequested?.Invoke(this, EventArgs.Empty);
 
+        _updateItem = new MenuItem
+        {
+            Icon = new WpfUi.SymbolIcon { Symbol = WpfUi.SymbolRegular.ArrowDownload24 },
+        };
+        _updateItem.Click += (_, _) => UpdateRequested?.Invoke(this, EventArgs.Empty);
+        _updateSeparator = new Separator();
+
         var menu = new ContextMenu
         {
             Placement = PlacementMode.MousePoint,
         };
+        menu.Items.Add(_updateItem);
+        menu.Items.Add(_updateSeparator);
         menu.Items.Add(settingsItem);
         menu.Items.Add(new Separator());
         menu.Items.Add(quitItem);
+        _menu = menu;
+        UpdateMenuItemState();
         return menu;
     }
+
+    private void UpdateMenuItemState()
+    {
+        var visibility = _updateVersion is null ? Visibility.Collapsed : Visibility.Visible;
+        _updateItem!.Visibility = visibility;
+        _updateSeparator!.Visibility = visibility;
+        if (_updateVersion is not null)
+        {
+            var localizer = Localizer.Instance;
+            _updateItem.Header = string.Format(localizer.Culture, localizer.Get("Tray_Update"), _updateVersion);
+        }
+    }
+
+    private void OnBalloonTipClicked(object? sender, EventArgs e) => UpdateRequested?.Invoke(this, EventArgs.Empty);
 
     private static MenuItem CreateMenuItem(string textKey, WpfUi.SymbolRegular symbol)
     {

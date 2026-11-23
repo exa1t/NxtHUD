@@ -15,7 +15,7 @@
     The GitHub Release workflow (.github\workflows\release.yml) runs this same script.
 
 .PARAMETER Version
-    Version to stamp on the app and installer, for example 1.3.0. Defaults to <Version> in
+    Version to stamp on the app and installer, for example 1.4.0. Defaults to <Version> in
     Directory.Build.props.
 
 .PARAMETER FrameworkDependent
@@ -29,7 +29,7 @@
     .\installer\build-installer.ps1
 
 .EXAMPLE
-    .\installer\build-installer.ps1 -Version 1.3.0 -SkipTests
+    .\installer\build-installer.ps1 -Version 1.4.0 -SkipTests
 #>
 [CmdletBinding()]
 param(

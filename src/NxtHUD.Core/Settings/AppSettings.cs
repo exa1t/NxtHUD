@@ -48,6 +48,12 @@ public sealed record AppSettings
     /// <summary>Suppress flyouts while a fullscreen game or app is in the foreground.</summary>
     public bool DisableInFullscreen { get; set; } = true;
 
+    /// <summary>Look for a newer release on GitHub at start-up and once a day.</summary>
+    public bool CheckForUpdates { get; set; } = true;
+
+    /// <summary>The newest version the tray has already announced, so each one is announced once.</summary>
+    public string? LastAnnouncedUpdate { get; set; }
+
     // ----- Appearance -----
 
     public AppTheme Theme { get; set; } = AppTheme.System;

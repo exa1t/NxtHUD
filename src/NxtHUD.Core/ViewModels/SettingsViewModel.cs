@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using NxtHUD.Core.Localization;
 using NxtHUD.Core.Services;
 using NxtHUD.Core.Settings;
+using NxtHUD.Core.Updates;
 
 namespace NxtHUD.Core.ViewModels;
 
@@ -16,6 +17,7 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
 {
     private readonly ISettingsService _settings;
     private readonly IStartupService _startup;
+    private readonly UpdateChecker? _updates;
 
     private bool _applyingOwnChange;
     private string? _errorMessage;
@@ -24,18 +26,69 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         ISettingsService settings,
         IStartupService startup,
         string appVersion = "",
-        string settingsFilePath = "")
+        string settingsFilePath = "",
+        UpdateChecker? updates = null,
+        Action? openReleasePage = null)
     {
         ArgumentNullException.ThrowIfNull(settings);
         ArgumentNullException.ThrowIfNull(startup);
 
         _settings = settings;
         _startup = startup;
+        _updates = updates;
         AppVersion = appVersion;
         SettingsFilePath = settingsFilePath;
 
         ResetToDefaultsCommand = new RelayCommand(ResetToDefaults);
+        CheckForUpdatesNowCommand = new AsyncRelayCommand(CheckForUpdatesNowAsync, () => _updates is not null);
+        OpenReleasePageCommand = new RelayCommand(() => openReleasePage?.Invoke());
         _settings.Changed += OnSettingsChanged;
+        Localizer.Instance.PropertyChanged += OnLanguageChanged;
+        if (_updates is not null)
+        {
+            _updates.PropertyChanged += OnUpdatesChanged;
+        }
+    }
+
+    // ----- Updates -----
+
+    public bool CheckForUpdates
+    {
+        get => _settings.Current.CheckForUpdates;
+        set => Apply(s => s.CheckForUpdates = value);
+    }
+
+    public IAsyncRelayCommand CheckForUpdatesNowCommand { get; }
+
+    /// <summary>Opens the latest release's page, where the installer is.</summary>
+    public IRelayCommand OpenReleasePageCommand { get; }
+
+    public bool IsUpdateAvailable => _updates?.Status == UpdateStatus.Available;
+
+    /// <summary>One line under the update switch saying what the last check found.</summary>
+    public string UpdateStatusText => _updates?.Status switch
+    {
+        UpdateStatus.Checking => Localizer.Instance.Get("About_Updates_Checking"),
+        UpdateStatus.UpToDate => Localizer.Instance.Get("About_Updates_UpToDate"),
+        UpdateStatus.Available => string.Format(
+            Localizer.Instance.Culture,
+            Localizer.Instance.Get("About_Updates_Available"),
+            _updates.AvailableVersion),
+        UpdateStatus.Failed => Localizer.Instance.Get("About_Updates_Failed"),
+        _ => Localizer.Instance.Get("About_Updates_Description"),
+    };
+
+    private Task CheckForUpdatesNowAsync() => _updates?.CheckAsync() ?? Task.CompletedTask;
+
+    private void OnUpdatesChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(UpdateStatusText));
+        OnPropertyChanged(nameof(IsUpdateAvailable));
+    }
+
+    private void OnLanguageChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(UpdateStatusText));
     }
 
     // ----- Choices offered by the pickers -----
@@ -372,6 +425,11 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
     public void Dispose()
     {
         _settings.Changed -= OnSettingsChanged;
+        Localizer.Instance.PropertyChanged -= OnLanguageChanged;
+        if (_updates is not null)
+        {
+            _updates.PropertyChanged -= OnUpdatesChanged;
+        }
     }
 
     /// <summary>

@@ -10,10 +10,10 @@
 
     The Release workflow (.github\workflows\release.yml) runs this when it publishes a release.
     Run it by hand to preview the notes:
-        .\installer\release-notes.ps1 -Version 1.3.0 -OutFile notes.md
+        .\installer\release-notes.ps1 -Version 1.4.0 -OutFile notes.md
 
 .PARAMETER Version
-    The version being released, for example 1.3.0.
+    The version being released, for example 1.4.0.
 
 .PARAMETER OutFile
     Where to write the notes (Markdown).

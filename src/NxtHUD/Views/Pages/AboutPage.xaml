@@ -45,6 +45,34 @@
 
         <ui:CardControl Margin="0,0,0,8">
             <ui:CardControl.Icon>
+                <ui:FontIcon Glyph="&#xE895;" Style="{StaticResource CardIconStyle}" />
+            </ui:CardControl.Icon>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardTitleStyle}" Text="{loc:Loc About_Updates_Title}" />
+                    <TextBlock
+                        Style="{StaticResource CardDescriptionStyle}"
+                        Text="{Binding UpdateStatusText}"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <StackPanel Orientation="Horizontal">
+                <ui:Button
+                    Margin="0,0,8,0"
+                    Appearance="Primary"
+                    Command="{Binding OpenReleasePageCommand, Mode=OneTime}"
+                    Content="{loc:Loc About_Updates_Download}"
+                    Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <ui:Button
+                    Margin="0,0,12,0"
+                    Command="{Binding CheckForUpdatesNowCommand, Mode=OneTime}"
+                    Content="{loc:Loc About_Updates_CheckNow}" />
+                <ui:ToggleSwitch IsChecked="{Binding CheckForUpdates}" />
+            </StackPanel>
+        </ui:CardControl>
+
+        <ui:CardControl Margin="0,0,0,8">
+            <ui:CardControl.Icon>
                 <ui:FontIcon Glyph="&#xE8B7;" Style="{StaticResource CardIconStyle}" />
             </ui:CardControl.Icon>
             <ui:CardControl.Header>

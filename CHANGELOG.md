@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.4.0
+
+- **Update notices.** NxtHUD now checks GitHub for a newer release 30 seconds after it starts
+  and once a day. When one is out it tells you once with a notification, and adds a
+  "Download NxtHUD x" item to the tray menu; both open the release page. Settings → About has
+  a new card to switch this off, check now, or download. Nothing about you is sent.
+- **Fixed for good: the taskbar stats panel and music widget turning gray.** 1.3.1 rebuilt them
+  after waking from sleep, but they could also go gray right after starting Windows. They are
+  now drawn by the processor instead of the graphics card, so a graphics reset (sign-in, sleep,
+  driver updates, switching graphics chips) can no longer wipe their see-through background.
+- **Fixed: start-with-Windows jumping to another copy.** Running a second copy of NxtHUD (the
+  portable zip, or a build) used to re-point start-with-Windows at that copy. Now it only moves
+  the entry when the registered copy no longer exists, for example after you moved the folder.
+
 ## 1.3.1
 
 - **Fixed: the taskbar stats panel (and the music widget) turning into a gray box** after the

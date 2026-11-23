@@ -22,6 +22,9 @@ internal static class AppInfo
 
     public static string Version { get; } = ReadVersion();
 
+    /// <summary>Redirects to the newest release's page; the update check reads the tag from it.</summary>
+    public const string LatestReleaseUrl = "https://github.com/exa1t/NxtHUD/releases/latest";
+
     /// <summary>%AppData%\NxtHUD</summary>
     public static string DataDirectory { get; } = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

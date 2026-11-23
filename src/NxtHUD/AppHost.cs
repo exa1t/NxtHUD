@@ -1,12 +1,14 @@
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using NxtHUD.Core.Flyouts;
 using NxtHUD.Core.Input;
 using NxtHUD.Core.Localization;
 using NxtHUD.Core.Media;
 using NxtHUD.Core.Migration;
 using NxtHUD.Core.Settings;
+using NxtHUD.Core.Updates;
 using NxtHUD.Core.ViewModels;
 using NxtHUD.Interop;
 using NxtHUD.Services;
@@ -31,6 +33,13 @@ internal sealed class AppHost : IDisposable
     private readonly bool _startedAtSignIn;
     private readonly FlyoutCoordinator _coordinator;
     private readonly FlyoutPresenter[] _presenters;
+    /// <summary>The first update check waits until start-up (and sign-in) has settled.</summary>
+    private static readonly TimeSpan FirstUpdateCheckDelay = TimeSpan.FromSeconds(30);
+
+    private static readonly TimeSpan UpdateCheckInterval = TimeSpan.FromHours(24);
+
+    private readonly GitHubReleaseSource _releaseSource;
+    private readonly DispatcherTimer _updateTimer;
     private SettingsWindow? _settingsWindow;
     private bool _disposed;
 
@@ -45,7 +54,10 @@ internal sealed class AppHost : IDisposable
         Startup = new StartupService(AppInfo.Name, AppInfo.GetAutostartCommand());
         Theme = new ThemeService(Settings, dispatcher);
         Tray = new TrayIconService();
-        SettingsViewModel = new SettingsViewModel(Settings, Startup, AppInfo.Version, AppInfo.SettingsPath);
+        _releaseSource = new GitHubReleaseSource();
+        Updates = new UpdateChecker(_releaseSource, AppInfo.Version);
+        _updateTimer = new DispatcherTimer(DispatcherPriority.Background, dispatcher) { Interval = FirstUpdateCheckDelay };
+        SettingsViewModel = new SettingsViewModel(Settings, Startup, AppInfo.Version, AppInfo.SettingsPath, Updates, OpenReleasePage);
 
         Media = new SmtcMediaService(dispatcher);
         Volume = new CoreAudioVolumeService();
@@ -129,6 +141,9 @@ internal sealed class AppHost : IDisposable
 
     internal TaskbarStatsService TaskbarStatsHost { get; }
 
+    /// <summary>Looks for a newer release on GitHub.</summary>
+    internal UpdateChecker Updates { get; }
+
     /// <summary>Asks the taskbar windows to rebuild after waking from sleep or a display change.</summary>
     internal DisplayWakeWatcher DisplayWake { get; }
 
@@ -159,6 +174,12 @@ internal sealed class AppHost : IDisposable
         TaskbarStatsHost.Start();
         DisplayWake.RebuildRequested += OnRebuildTaskbarWindows;
         DisplayWake.Start();
+
+        Tray.UpdateRequested += OnUpdateRequested;
+        Updates.PropertyChanged += OnUpdateStatusChanged;
+        _updateTimer.Tick += OnUpdateTimerTick;
+        _updateTimer.Start();
+
         _ = StartMediaAsync();
 
         if (loadResult == SettingsLoadResult.CreatedDefaults)
@@ -241,6 +262,12 @@ internal sealed class AppHost : IDisposable
 
         // Unhook first: the volume keys must work normally again the moment the app stops handling them.
         KeyboardHook.Dispose();
+
+        _updateTimer.Stop();
+        _updateTimer.Tick -= OnUpdateTimerTick;
+        Updates.PropertyChanged -= OnUpdateStatusChanged;
+        Tray.UpdateRequested -= OnUpdateRequested;
+        _releaseSource.Dispose();
 
         DisplayWake.RebuildRequested -= OnRebuildTaskbarWindows;
         DisplayWake.Dispose();
@@ -505,6 +532,69 @@ internal sealed class AppHost : IDisposable
             || previous.ReplaceNativeVolumeOverlay != current.ReplaceNativeVolumeOverlay)
         {
             UpdateKeyboardHook();
+        }
+
+        if (!previous.CheckForUpdates && current.CheckForUpdates)
+        {
+            _ = Updates.CheckAsync();
+        }
+    }
+
+    // ----- Updates -----
+
+    private void OnUpdateTimerTick(object? sender, EventArgs e)
+    {
+        _updateTimer.Interval = UpdateCheckInterval;
+        if (Settings.Current.CheckForUpdates)
+        {
+            _ = Updates.CheckAsync();
+        }
+    }
+
+    private void OnUpdateStatusChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(UpdateChecker.Status))
+        {
+            return;
+        }
+
+        switch (Updates.Status)
+        {
+            case UpdateStatus.Failed:
+                Log.Info($"Checking for updates failed: {Updates.LastError?.Message ?? "the latest release has no version tag"}.");
+                break;
+
+            case UpdateStatus.UpToDate:
+                Tray.SetAvailableUpdate(null);
+                break;
+
+            case UpdateStatus.Available when Updates.AvailableVersion is { } version:
+                Tray.SetAvailableUpdate(version);
+
+                // Announce each new version once, not at every start.
+                if (UpdateChecker.IsNewer(version, Settings.Current.LastAnnouncedUpdate ?? AppInfo.Version))
+                {
+                    Log.Info($"NxtHUD {version} is available.");
+                    Tray.ShowUpdateNotice(version);
+                    Settings.Update(s => s.LastAnnouncedUpdate = version);
+                }
+
+                break;
+        }
+    }
+
+    private void OnUpdateRequested(object? sender, EventArgs e) => OpenReleasePage();
+
+    /// <summary>Opens the latest release's page in the browser, where the installer is.</summary>
+    private static void OpenReleasePage()
+    {
+        try
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(AppInfo.LatestReleaseUrl) { UseShellExecute = true });
+        }
+        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
+        {
+            Log.Error("Opening the release page failed.", ex);
         }
     }
 

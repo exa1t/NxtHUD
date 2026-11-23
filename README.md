@@ -57,6 +57,10 @@ NxtHUD installer over your NxtFlyout install: it upgrades it in place, removes t
 shortcuts, and NxtHUD brings your settings and start-with-Windows choice across on its first
 start. Your old `%AppData%\NxtFlyout` folder is left untouched.
 
+From 1.4.0 NxtHUD tells you when a new version is out: a notification and a *Download* item in
+the tray menu, both opening the release page. It checks GitHub at start-up and once a day; switch
+it off under **Settings → About**.
+
 To upgrade, run a newer installer: it closes the running copy and keeps your settings. To remove
 it, use **Settings → Apps → Installed apps → NxtHUD → Uninstall**.
 
@@ -91,6 +95,7 @@ No installer wanted? Download `NxtHUD-<version>-portable-x64.zip`, unzip it anyw
   the pointer is over them and can pause while a fullscreen game is running.
 - **Tray app** – single instance, Fluent tray menu, optional start with Windows, System / Light /
   Dark theme that follows Windows and its accent colour live.
+- **Update notices** – tells you once when a new release is out and takes you to its download.
 - **Localizable** – every string comes from a resx file; English ships first.
 
 ## 💻 Requirements
@@ -125,8 +130,8 @@ self-contained, so the target PC does not need .NET.
 Releases are built by GitHub Actions on a Windows machine:
 
 ```powershell
-git tag v1.3.0
-git push origin v1.3.0
+git tag v1.4.0
+git push origin v1.4.0
 ```
 
 The **Release** workflow (`.github/workflows/release.yml`) takes the version from the tag, runs
@@ -136,7 +141,7 @@ the files are attached to the workflow run.
 
 The release notes are that version's section of `CHANGELOG.md` (under "What's new"), followed by
 the install steps in `installer/release-notes.md`, so add the changelog entry before tagging.
-Preview them with `.\installer\release-notes.ps1 -Version 1.3.0 -OutFile notes.md`.
+Preview them with `.\installer\release-notes.ps1 -Version 1.4.0 -OutFile notes.md`.
 
 The **CI** workflow builds and tests every push to `main`.
 
@@ -170,7 +175,7 @@ that cannot be parsed is copied to `settings.corrupt.json` and defaults are used
 | General | Start with Windows, language, pause in fullscreen games |
 | Flyouts | On/off for each flyout and the taskbar widget; position of the volume, lock keys and Up Next flyouts; replace the Windows volume overlay; taskbar widget offset; visualizer on/off, bar count, direction and colour; hide-after delay |
 | Appearance | Theme, backdrop material, which display to use, media flyout position, compact layout, animation speed |
-| About | Version, settings folder, reset to defaults |
+| About | Version, check for updates (on/off, check now, download), settings folder, reset to defaults |
 
 Errors are logged to `%AppData%\NxtHUD\logs\nxthud.log`.
 
