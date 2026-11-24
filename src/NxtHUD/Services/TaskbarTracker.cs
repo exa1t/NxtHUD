@@ -97,7 +97,13 @@ internal sealed class TaskbarTracker : IDisposable
 
     private void OnTimerTick(object? sender, EventArgs e)
     {
-        ScanButtons();
+        // While a fullscreen game or app covers the taskbar the widget and stats are hidden
+        // anyway, so leave Explorer alone; the last known layout is kept for when it ends.
+        if (!FullscreenDetector.IsFullscreenAppActive())
+        {
+            ScanButtons();
+        }
+
         Changed?.Invoke(this, EventArgs.Empty);
     }
 

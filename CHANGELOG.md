@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.1
+
+- **Lighter on games:** while a fullscreen game or app covers the taskbar, NxtHUD no longer
+  re-reads the taskbar's buttons every 1.5 seconds. The widget and stats are hidden then anyway;
+  they pick up where they left off when you leave the game.
+- **Waking from a dimmed screen** now counts as waking too: some PCs go from dimmed straight
+  back to on, and NxtHUD missed that when deciding to refresh the taskbar windows.
+- **Update check:** a four-part version such as 1.4.0.1 is now recognised as newer than 1.4.0.
+
 ## 1.4.0
 
 - **Update notices.** NxtHUD now checks GitHub for a newer release 30 seconds after it starts

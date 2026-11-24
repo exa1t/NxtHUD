@@ -141,11 +141,12 @@ internal sealed class DisplayWakeWatcher : IDisposable
                 if (setting.PowerSetting == _consoleDisplayState && setting.DataLength >= sizeof(int))
                 {
                     // 0 = off, 1 = on, 2 = dimmed. Windows sends the current state right after
-                    // registering; only a change from off to on counts as waking.
+                    // registering; only coming back on from off or dimmed counts as waking
+                    // (some PCs go dimmed -> on without reporting off in between).
                     var state = Marshal.ReadInt32(lParam, Marshal.OffsetOf<PowerBroadcastSetting>(nameof(PowerBroadcastSetting.Data)).ToInt32());
                     var previous = _displayState;
                     _displayState = state;
-                    if (previous == 0 && state == 1)
+                    if (previous is 0 or 2 && state == 1)
                     {
                         ScheduleRebuild("the display turned back on");
                     }

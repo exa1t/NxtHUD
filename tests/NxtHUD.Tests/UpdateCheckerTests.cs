@@ -26,6 +26,8 @@ public class UpdateCheckerTests
     [InlineData("V2.0", "2.0.0")]
     [InlineData(" v1.4.0-beta.1 ", "1.4.0")]
     [InlineData("1.3.1+abc123", "1.3.1")]
+    [InlineData("v1.4.0.1", "1.4.0.1")]
+    [InlineData("1.4.0.0", "1.4.0")]
     public void ParseVersion_ReadsTagsAndVersions(string text, string expected)
     {
         Assert.Equal(Version.Parse(expected), UpdateChecker.ParseVersion(text));
@@ -46,6 +48,9 @@ public class UpdateCheckerTests
     [InlineData("v1.10.0", "1.9.0", true)]
     [InlineData("v1.3.1", "1.3.1", false)]
     [InlineData("v1.3", "1.3.0", false)]
+    [InlineData("v1.4.0.1", "1.4.0", true)]
+    [InlineData("v1.4.0.0", "1.4.0", false)]
+    [InlineData("v1.4.1", "1.4.0.1", true)]
     [InlineData("v1.3.0", "1.3.1", false)]
     [InlineData("nonsense", "1.3.1", false)]
     [InlineData("v1.3.2", null, false)]
@@ -61,6 +66,15 @@ public class UpdateCheckerTests
 
         Assert.Equal(UpdateStatus.Available, await checker.CheckAsync());
         Assert.Equal("1.4.0", checker.AvailableVersion);
+    }
+
+    [Fact]
+    public async Task Check_ReportsAFourPartHotfix()
+    {
+        var checker = new UpdateChecker(new FakeReleaseSource { Next = () => Task.FromResult("v1.4.0.1") }, "1.4.0");
+
+        Assert.Equal(UpdateStatus.Available, await checker.CheckAsync());
+        Assert.Equal("1.4.0.1", checker.AvailableVersion);
     }
 
     [Fact]

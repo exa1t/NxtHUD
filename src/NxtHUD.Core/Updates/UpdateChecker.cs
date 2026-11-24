@@ -90,8 +90,11 @@ public sealed class UpdateChecker : ObservableObject
             return null;
         }
 
-        // Treat 1.3 and 1.3.0 alike.
-        return new Version(version.Major, version.Minor, Math.Max(0, version.Build));
+        // Treat 1.3 and 1.3.0 alike, and 1.3.0.0 like 1.3.0; keep a real fourth part (1.4.0.1).
+        var build = Math.Max(0, version.Build);
+        return version.Revision > 0
+            ? new Version(version.Major, version.Minor, build, version.Revision)
+            : new Version(version.Major, version.Minor, build);
     }
 
     /// <summary>Whether <paramref name="latest"/> is newer than <paramref name="current"/>; false if either is not a version.</summary>
@@ -129,5 +132,5 @@ public sealed class UpdateChecker : ObservableObject
         return Status;
     }
 
-    private static string? Format(Version? version) => version?.ToString(3);
+    private static string? Format(Version? version) => version?.ToString(version.Revision > 0 ? 4 : 3);
 }
