@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.2
+
+- **Fixed, the real cause this time: the taskbar stats panel turning into a gray box.** Whenever
+  Windows announced a colour or theme change (energy saver switching transparency off, the
+  settings Windows applies a minute or two after sign-in, waking from sleep), NxtHUD's theme
+  refresh gave the stats panel a themed background, because WPF had picked the panel as the
+  app's "main window". The panel and the music widget now never take that role, like the
+  flyouts and the settings window already didn't.
+
 ## 1.4.1
 
 - **Lighter on games:** while a fullscreen game or app covers the taskbar, NxtHUD no longer

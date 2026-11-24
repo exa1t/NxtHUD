@@ -1,10 +1,30 @@
+using System.Windows;
 using System.Windows.Interop;
 
 namespace NxtHUD.Views;
 
-/// <summary>How the see-through taskbar windows (the widget and the stats panel) are drawn.</summary>
+/// <summary>Set-up shared by the see-through taskbar windows (the widget and the stats panel).</summary>
 internal static class TaskbarWindowRendering
 {
+    /// <summary>
+    /// Makes sure <paramref name="window"/> does not become the app's main window.
+    /// </summary>
+    /// <remarks>
+    /// WPF makes the first window created the main window, and the stats panel is usually the
+    /// first. On every Windows colour or theme change (energy saver switching transparency
+    /// off, the settings Windows applies after sign-in) WPF-UI's theme refresh re-themes the
+    /// main window's background, which turned the panel into a gray box: white at about a third
+    /// opacity. The flyouts, the tray menu owner and the settings window already step aside the
+    /// same way.
+    /// </remarks>
+    public static void NeverMainWindow(Window window)
+    {
+        if (Application.Current is { } app && ReferenceEquals(app.MainWindow, window))
+        {
+            app.MainWindow = null;
+        }
+    }
+
     /// <summary>
     /// Draws the window with the processor instead of the graphics card.
     /// </summary>

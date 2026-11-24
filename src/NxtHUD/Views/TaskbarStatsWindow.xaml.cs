@@ -22,6 +22,7 @@ public partial class TaskbarStatsWindow : Window
     public TaskbarStatsWindow(TaskbarStatsViewModel viewModel)
     {
         InitializeComponent();
+        TaskbarWindowRendering.NeverMainWindow(this);
         _viewModel = viewModel;
         _viewModel.PropertyChanged += OnViewModelPropertyChanged;
         Closed += (_, _) => _viewModel.PropertyChanged -= OnViewModelPropertyChanged;

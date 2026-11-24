@@ -24,6 +24,7 @@ public partial class TaskbarWidgetWindow : Window
     public TaskbarWidgetWindow(TaskbarWidgetViewModel viewModel)
     {
         InitializeComponent();
+        TaskbarWindowRendering.NeverMainWindow(this);
         DataContext = viewModel;
     }
 
