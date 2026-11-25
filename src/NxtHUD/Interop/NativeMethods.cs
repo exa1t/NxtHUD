@@ -204,6 +204,36 @@ internal static class NativeMethods
         }
     }
 
+    /// <summary>
+    /// Makes <paramref name="owner"/> the owner of <paramref name="hWnd"/> if it is not already.
+    /// Returns true when the owner had to be put back.
+    /// </summary>
+    internal static bool EnsureOwner(IntPtr hWnd, IntPtr owner)
+    {
+        if (GetWindow(hWnd, GW_OWNER) == owner)
+        {
+            return false;
+        }
+
+        // GWLP_HWNDPARENT on a top-level window sets its owner, despite the name.
+        if (IntPtr.Size == 8)
+        {
+            SetWindowLongPtr64(hWnd, GWLP_HWNDPARENT, owner);
+        }
+        else
+        {
+            SetWindowLong32(hWnd, GWLP_HWNDPARENT, owner.ToInt32());
+        }
+
+        return true;
+    }
+
+    private const uint GW_OWNER = 4;
+    private const int GWLP_HWNDPARENT = -8;
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
+
     // The *Ptr variants only exist in 64-bit user32, hence the two pairs.
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]

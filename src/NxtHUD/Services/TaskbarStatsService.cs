@@ -207,7 +207,15 @@ internal sealed class TaskbarStatsService : IDisposable
         // Keep the right edge against the tray, however wide the text is this second.
         var x = span.Value.Right - (width * scale);
         var y = rect.Top + (VerticalInset * scale);
-        NativeMethods.MoveWindowTo(new WindowInteropHelper(_window).EnsureHandle(), x, y);
+        var handle = new WindowInteropHelper(_window).EnsureHandle();
+
+        // Owned by the taskbar is what keeps the panel above it and clickable; see the widget.
+        if (NativeMethods.EnsureOwner(handle, taskbar.Handle))
+        {
+            Log.Info("The taskbar stats had lost their place on the taskbar; reattached them.");
+        }
+
+        NativeMethods.MoveWindowTo(handle, x, y);
 
         if (!_window.IsVisible)
         {

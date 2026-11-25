@@ -196,6 +196,14 @@ internal sealed class TaskbarWidgetService : IDisposable
         _window.SetTaskbarTheme(ThemeService.IsTaskbarDark());
 
         var handle = new WindowInteropHelper(_window).EnsureHandle();
+
+        // Owned by the taskbar is what keeps the widget above it and clickable. Something (seen
+        // after monitor changes) can detach it, leaving it behind the taskbar; put it back.
+        if (NativeMethods.EnsureOwner(handle, taskbar.Handle))
+        {
+            Log.Info("The taskbar widget had lost its place on the taskbar; reattached it.");
+        }
+
         var x = rect.Left + ((LeftGap + _settings.Current.TaskbarWidgetOffset) * scale);
         var y = rect.Top + (VerticalInset * scale);
 

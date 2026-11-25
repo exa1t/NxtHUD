@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.3
+
+- **Fixed: the music widget on the taskbar stopped reacting to clicks.** It stays above the
+  taskbar only while Windows keeps it attached to the taskbar, and something (seen after
+  monitor changes) could detach it, leaving the taskbar on top of it. The widget and the stats
+  panel now check every 1.5 seconds and reattach themselves, noting it in the log.
+
 ## 1.4.2
 
 - **Fixed, the real cause this time: the taskbar stats panel turning into a gray box.** Whenever
