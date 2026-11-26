@@ -11,6 +11,10 @@
 </p>
 
 <p align="center">
+  <b>English</b> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.zh-CN.md">简体中文</a>
+</p>
+
+<p align="center">
   A lightweight tray app that brings <b>Fluent-style flyouts</b> to your media keys, volume and lock keys,<br>
   plus a <b>now-playing widget</b> with a live visualizer right on the taskbar.
 </p>
