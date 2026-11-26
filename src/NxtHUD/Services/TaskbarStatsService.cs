@@ -36,6 +36,10 @@ internal sealed class TaskbarStatsService : IDisposable
     private IntPtr _ownerTaskbar;
     private bool _started;
     private bool _updatePending;
+    private int _reattachCount;
+
+    /// <summary>After this many reattachments the window is replaced instead.</summary>
+    private const int MaxReattachments = 3;
 
     public TaskbarStatsService(TaskbarStatsViewModel viewModel, TaskbarTracker tracker, TaskbarWidgetService widget, Dispatcher dispatcher)
     {
@@ -160,8 +164,16 @@ internal sealed class TaskbarStatsService : IDisposable
             CloseWindow();
         }
 
+        if (_window is not null && IsDestroyed(_window))
+        {
+            // Windows destroyed the panel without WPF noticing; start over with a new one.
+            Log.Info("The taskbar stats window had been destroyed; replacing it.");
+            ForgetWindow();
+        }
+
         if (_window is null)
         {
+            _reattachCount = 0;
             _window = new TaskbarStatsWindow(_viewModel);
             _window.Closed += OnWindowClosed;
             _window.TextChanged += OnTextChanged;
@@ -209,10 +221,27 @@ internal sealed class TaskbarStatsService : IDisposable
         var y = rect.Top + (VerticalInset * scale);
         var handle = new WindowInteropHelper(_window).EnsureHandle();
 
-        // Owned by the taskbar is what keeps the panel above it and clickable; see the widget.
-        if (NativeMethods.EnsureOwner(handle, taskbar.Handle))
+        // Owned by the taskbar is what keeps the panel above it and clickable. If it keeps
+        // coming loose, or cannot be put back, replace the window rather than fight over it.
+        switch (NativeMethods.EnsureOwner(handle, taskbar.Handle, out var previousOwner))
         {
-            Log.Info("The taskbar stats had lost their place on the taskbar; reattached them.");
+            case NativeMethods.OwnerCheck.Reattached when ++_reattachCount < MaxReattachments:
+                Log.Info($"The taskbar stats had lost their place on the taskbar (owned by {NativeMethods.GetClassName(previousOwner)}); reattached them.");
+                break;
+
+            case NativeMethods.OwnerCheck.Reattached:
+            case NativeMethods.OwnerCheck.Failed:
+                Log.Info($"The taskbar stats could not stay on the taskbar (owned by {NativeMethods.GetClassName(previousOwner)}); replacing the window.");
+                if (IsDestroyed(_window))
+                {
+                    ForgetWindow();
+                }
+                else
+                {
+                    CloseWindow();
+                }
+
+                return;
         }
 
         NativeMethods.MoveWindowTo(handle, x, y);
@@ -244,6 +273,26 @@ internal sealed class TaskbarStatsService : IDisposable
         window.Closed -= OnWindowClosed;
         window.TextChanged -= OnTextChanged;
         window.Close();
+    }
+
+    /// <summary>Whether the window's native handle is gone although WPF still holds the window.</summary>
+    private static bool IsDestroyed(System.Windows.Window window)
+    {
+        var handle = new WindowInteropHelper(window).Handle;
+        return handle != IntPtr.Zero && !NativeMethods.IsWindow(handle);
+    }
+
+    /// <summary>Drops a window whose handle is already gone, without asking WPF to close it.</summary>
+    private void ForgetWindow()
+    {
+        if (_window is not null)
+        {
+            _window.Closed -= OnWindowClosed;
+            _window.TextChanged -= OnTextChanged;
+            _window = null;
+        }
+
+        _ownerTaskbar = IntPtr.Zero;
     }
 
     /// <summary>Windows destroys an owned window together with its owner (an Explorer restart).</summary>

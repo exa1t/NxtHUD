@@ -204,15 +204,34 @@ internal static class NativeMethods
         }
     }
 
-    /// <summary>
-    /// Makes <paramref name="owner"/> the owner of <paramref name="hWnd"/> if it is not already.
-    /// Returns true when the owner had to be put back.
-    /// </summary>
-    internal static bool EnsureOwner(IntPtr hWnd, IntPtr owner)
+    internal enum OwnerCheck
     {
-        if (GetWindow(hWnd, GW_OWNER) == owner)
+        /// <summary>The window was already owned by the expected owner.</summary>
+        Attached,
+
+        /// <summary>It had come loose and was put back.</summary>
+        Reattached,
+
+        /// <summary>It could not be put back, or the window no longer exists.</summary>
+        Failed,
+    }
+
+    /// <summary>
+    /// Makes <paramref name="owner"/> the owner of <paramref name="hWnd"/> if it is not already,
+    /// and reports whether that worked. <paramref name="previousOwner"/> is what it was owned by.
+    /// </summary>
+    internal static OwnerCheck EnsureOwner(IntPtr hWnd, IntPtr owner, out IntPtr previousOwner)
+    {
+        previousOwner = IntPtr.Zero;
+        if (hWnd == IntPtr.Zero || !IsWindow(hWnd))
         {
-            return false;
+            return OwnerCheck.Failed;
+        }
+
+        previousOwner = GetWindow(hWnd, GW_OWNER);
+        if (previousOwner == owner)
+        {
+            return OwnerCheck.Attached;
         }
 
         // GWLP_HWNDPARENT on a top-level window sets its owner, despite the name.
@@ -225,7 +244,20 @@ internal static class NativeMethods
             SetWindowLong32(hWnd, GWLP_HWNDPARENT, owner.ToInt32());
         }
 
-        return true;
+        return GetWindow(hWnd, GW_OWNER) == owner ? OwnerCheck.Reattached : OwnerCheck.Failed;
+    }
+
+    /// <summary>The window class of <paramref name="hWnd"/>, for log messages.</summary>
+    internal static string GetClassName(IntPtr hWnd)
+    {
+        if (hWnd == IntPtr.Zero)
+        {
+            return "none";
+        }
+
+        var buffer = new char[128];
+        var length = GetClassNameW(hWnd, buffer, buffer.Length);
+        return length > 0 ? new string(buffer, 0, length) : "unknown";
     }
 
     private const uint GW_OWNER = 4;
@@ -233,6 +265,13 @@ internal static class NativeMethods
 
     [DllImport("user32.dll")]
     private static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool IsWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetClassNameW(IntPtr hWnd, [Out] char[] className, int maxCount);
 
     // The *Ptr variants only exist in 64-bit user32, hence the two pairs.
 

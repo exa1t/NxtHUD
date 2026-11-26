@@ -247,17 +247,74 @@ internal sealed class SmtcMediaService : IMediaService, IDisposable
                 return;
             }
 
+            var title = properties?.Title ?? string.Empty;
             Publish(_current with
             {
-                Title = properties?.Title ?? string.Empty,
+                Title = title,
                 Artist = properties?.Artist ?? string.Empty,
                 AlbumTitle = properties?.AlbumTitle ?? string.Empty,
                 Artwork = artwork,
             });
+
+            if (artwork is null && title.Length > 0)
+            {
+                _ = RetryArtworkAsync(session, version, title);
+            }
         }
         catch (Exception ex)
         {
             Log.Error("Reading media properties failed.", ex);
+        }
+    }
+
+    /// <summary>Waits before each new try for a cover that is not ready yet.</summary>
+    private static readonly TimeSpan[] ArtworkRetryDelays =
+    {
+        TimeSpan.FromSeconds(1),
+        TimeSpan.FromSeconds(2.5),
+        TimeSpan.FromSeconds(5),
+    };
+
+    /// <summary>
+    /// Some players (Spotify among them) announce a new track before its cover is ready, hand
+    /// out an empty image, and do not say when the real one arrives. Ask again a few times
+    /// while the same track is still playing.
+    /// </summary>
+    private async Task RetryArtworkAsync(GlobalSystemMediaTransportControlsSession session, int version, string title)
+    {
+        foreach (var delay in ArtworkRetryDelays)
+        {
+            await Task.Delay(delay);
+            if (version != _mediaPropertiesVersion || !IsCurrent(session) || _current?.Title != title || _current.Artwork is not null)
+            {
+                return;
+            }
+
+            try
+            {
+                var properties = await session.TryGetMediaPropertiesAsync();
+                if (properties?.Title != title || properties.Thumbnail is not { } thumbnail)
+                {
+                    continue;
+                }
+
+                var artwork = await ReadThumbnailAsync(thumbnail);
+                if (artwork is not null
+                    && version == _mediaPropertiesVersion
+                    && IsCurrent(session)
+                    && _current is { } current
+                    && current.Title == title
+                    && current.Artwork is null)
+                {
+                    Publish(current with { Artwork = artwork });
+                    return;
+                }
+            }
+            catch (Exception ex) when (ex is not OutOfMemoryException)
+            {
+                // Art is optional; give up quietly and keep the player icon.
+                return;
+            }
         }
     }
 

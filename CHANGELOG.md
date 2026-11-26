@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.6
+
+- **Fixed: song covers sometimes missing.** Some players, Spotify among them, announce a new
+  song before its cover is ready. NxtHUD now asks for the cover again a few times while the song
+  plays, so it appears as soon as the player has it instead of staying on the player's icon.
+- **Fixed: the taskbar widget and stats could get stuck.** If one of them is destroyed behind
+  NxtHUD's back or keeps coming loose from the taskbar, NxtHUD now replaces it with a fresh
+  window instead of trying to reattach it over and over (and filling the log).
+
 ## 1.4.5
 
 - **Smoother Vietnamese.** The Vietnamese translation now reads the way people actually talk

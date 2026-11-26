@@ -40,6 +40,10 @@ internal sealed class TaskbarWidgetService : IDisposable
     private IntPtr _ownerTaskbar;
     private bool _started;
     private TaskbarSpan? _occupiedSpan;
+    private int _reattachCount;
+
+    /// <summary>After this many reattachments the window is replaced instead.</summary>
+    private const int MaxReattachments = 3;
 
     public TaskbarWidgetService(TaskbarWidgetViewModel viewModel, ISettingsService settings, TaskbarTracker tracker)
     {
@@ -177,8 +181,16 @@ internal sealed class TaskbarWidgetService : IDisposable
             CloseWindow();
         }
 
+        if (_window is not null && IsDestroyed(_window))
+        {
+            // Windows destroyed the widget without WPF noticing; start over with a new one.
+            Log.Info("The taskbar widget window had been destroyed; replacing it.");
+            ForgetWindow();
+        }
+
         if (_window is null)
         {
+            _reattachCount = 0;
             _window = new TaskbarWidgetWindow(_viewModel);
             _window.Closed += OnWindowClosed;
             _ownerTaskbar = taskbar.Handle;
@@ -198,10 +210,27 @@ internal sealed class TaskbarWidgetService : IDisposable
         var handle = new WindowInteropHelper(_window).EnsureHandle();
 
         // Owned by the taskbar is what keeps the widget above it and clickable. Something (seen
-        // after monitor changes) can detach it, leaving it behind the taskbar; put it back.
-        if (NativeMethods.EnsureOwner(handle, taskbar.Handle))
+        // after monitor changes) can detach it, leaving it behind the taskbar. Put it back; if it
+        // keeps coming loose, or cannot be put back, replace the window rather than fight over it.
+        switch (NativeMethods.EnsureOwner(handle, taskbar.Handle, out var previousOwner))
         {
-            Log.Info("The taskbar widget had lost its place on the taskbar; reattached it.");
+            case NativeMethods.OwnerCheck.Reattached when ++_reattachCount < MaxReattachments:
+                Log.Info($"The taskbar widget had lost its place on the taskbar (owned by {NativeMethods.GetClassName(previousOwner)}); reattached it.");
+                break;
+
+            case NativeMethods.OwnerCheck.Reattached:
+            case NativeMethods.OwnerCheck.Failed:
+                Log.Info($"The taskbar widget could not stay on the taskbar (owned by {NativeMethods.GetClassName(previousOwner)}); replacing the window.");
+                if (IsDestroyed(_window))
+                {
+                    ForgetWindow();
+                }
+                else
+                {
+                    CloseWindow();
+                }
+
+                return;
         }
 
         var x = rect.Left + ((LeftGap + _settings.Current.TaskbarWidgetOffset) * scale);
@@ -273,6 +302,26 @@ internal sealed class TaskbarWidgetService : IDisposable
         _ownerTaskbar = IntPtr.Zero;
         window.Closed -= OnWindowClosed;
         window.Close();
+    }
+
+    /// <summary>Whether the window's native handle is gone although WPF still holds the window.</summary>
+    private static bool IsDestroyed(System.Windows.Window window)
+    {
+        var handle = new WindowInteropHelper(window).Handle;
+        return handle != IntPtr.Zero && !NativeMethods.IsWindow(handle);
+    }
+
+    /// <summary>Drops a window whose handle is already gone, without asking WPF to close it.</summary>
+    private void ForgetWindow()
+    {
+        if (_window is not null)
+        {
+            _window.Closed -= OnWindowClosed;
+            _window = null;
+        }
+
+        _ownerTaskbar = IntPtr.Zero;
+        OccupiedSpan = null;
     }
 
     /// <summary>Windows destroys an owned window together with its owner (an Explorer restart).</summary>
