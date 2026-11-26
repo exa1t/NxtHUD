@@ -99,7 +99,8 @@ rồi chạy `NxtHUD.exe`.
 - **Ứng dụng khay** – chỉ chạy một bản, menu khay phong cách Fluent, tùy chọn khởi động cùng Windows,
   chủ đề Hệ thống / Sáng / Tối đi theo Windows và màu nhấn của nó theo thời gian thực.
 - **Thông báo cập nhật** – báo một lần khi có bản phát hành mới và đưa bạn tới trang tải về.
-- **Có thể bản địa hóa** – mọi chuỗi chữ đều lấy từ tệp resx; hiện có tiếng Anh trước.
+- **Tiếng Anh và tiếng Việt** – chọn ngôn ngữ trong Cài đặt → Chung, hoặc để tự theo Windows. Mọi
+  chuỗi chữ đều lấy từ tệp resx, nên thêm ngôn ngữ khác rất dễ.
 
 ## 💻 Yêu cầu
 
@@ -172,7 +173,8 @@ Cài đặt được lưu dưới dạng JSON trong `%AppData%\NxtHUD\settings.j
 thay đổi gì đó (About → *Open folder* sẽ đưa bạn tới đó). Tệp chấp nhận chỉnh sửa tay; tệp không đọc
 được sẽ được sao lưu thành `settings.corrupt.json` và giá trị mặc định được dùng.
 
-Giao diện ứng dụng hiện chỉ có tiếng Anh, nên tên các trang và tùy chọn dưới đây được giữ nguyên.
+Bảng dưới đây dùng tên trang trong giao diện tiếng Anh; ở giao diện tiếng Việt, chúng lần lượt là
+Chung, Cửa sổ nổi, Giao diện và Giới thiệu.
 
 | Trang | Tùy chọn |
 | --- | --- |
@@ -239,7 +241,7 @@ docs/promo/              banner và thẻ của README: sửa cards.html, chạy
 ## 🌍 Thêm ngôn ngữ
 
 1. Sao chép `src/NxtHUD.Core/Resources/Strings.resx` thành `Strings.<culture>.resx` (ví dụ
-   `Strings.vi.resx`) rồi dịch các giá trị.
+   `Strings.fr.resx`) rồi dịch các giá trị. `Strings.vi.resx` là một ví dụ đã hoàn chỉnh.
 2. Thêm tên culture vào `Localizer.SupportedLanguages`.
 
 Khi đó bộ chọn ngôn ngữ sẽ có ngôn ngữ mới, và việc chuyển đổi có hiệu lực ngay không cần khởi động
@@ -280,7 +282,6 @@ lại.
 - **Nhận diện toàn màn hình** dựa vào trạng thái thông báo của Windows, vốn cũng coi trình duyệt ở chế
   độ toàn màn hình F11 là đang bận. Tắt "Pause in fullscreen games" để thấy flyout trong trường hợp đó.
 - **Khởi động cùng Windows** dùng khóa Run trong registry của người dùng.
-- **Giao diện ứng dụng hiện chỉ có tiếng Anh**; cấu trúc cho các ngôn ngữ khác đã sẵn sàng.
 - **Hiệu ứng sóng nhạc.** Nó lắng nghe thiết bị phát mặc định tại thời điểm bắt đầu phát; sau khi đổi
   thiết bị đầu ra, nó có thể đứng yên cho tới lần tạm dừng/phát tiếp theo. Nó phản ứng với mọi âm thanh
   của hệ thống, không chỉ trình phát nhạc.

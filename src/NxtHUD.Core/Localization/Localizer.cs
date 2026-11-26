@@ -30,7 +30,7 @@ public sealed class Localizer : INotifyPropertyChanged
     /// Language codes offered in settings. The first entry follows Windows; the rest are
     /// culture names that have a Strings.&lt;culture&gt;.resx (English is the neutral resource).
     /// </summary>
-    public static IReadOnlyList<string> SupportedLanguages { get; } = new[] { AppSettings.SystemLanguage, "en" };
+    public static IReadOnlyList<string> SupportedLanguages { get; } = new[] { AppSettings.SystemLanguage, "en", "vi" };
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

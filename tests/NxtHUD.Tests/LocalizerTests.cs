@@ -163,6 +163,42 @@ public class LocalizerTests
         }
     }
 
+    public static IEnumerable<object[]> TranslatedLanguages() =>
+        Localizer.SupportedLanguages
+            .Where(language => language != AppSettings.SystemLanguage && language != "en")
+            .Select(language => new object[] { language });
+
+    [Theory]
+    [MemberData(nameof(TranslatedLanguages))]
+    public void Translation_HasEveryKey_WithTheSamePlaceholders(string language)
+    {
+        var resources = new System.Resources.ResourceManager("NxtHUD.Core.Resources.Strings", typeof(Localizer).Assembly);
+        var english = resources.GetResourceSet(System.Globalization.CultureInfo.InvariantCulture, true, false)!;
+        var translated = resources.GetResourceSet(System.Globalization.CultureInfo.GetCultureInfo(language), true, false);
+        Assert.True(translated is not null, $"No Strings.{language}.resx was built into the app.");
+
+        foreach (System.Collections.DictionaryEntry entry in english)
+        {
+            var key = (string)entry.Key;
+            var value = translated!.GetString(key);
+            Assert.False(string.IsNullOrWhiteSpace(value), $"Strings.{language}.resx is missing '{key}'.");
+
+            static string Placeholders(string text) =>
+                string.Join(",", System.Text.RegularExpressions.Regex.Matches(text, @"\{\d+\}").Select(m => m.Value).Order());
+            Assert.True(Placeholders((string)entry.Value!) == Placeholders(value!), $"'{key}' in Strings.{language}.resx has different {{0}} placeholders.");
+        }
+    }
+
+    [Fact]
+    public void Vietnamese_IsUsedWhenPicked()
+    {
+        var localizer = new Localizer();
+        localizer.SetLanguage("vi");
+
+        Assert.Equal("Cài đặt", localizer.Get("Tray_Settings"));
+        Assert.Equal("Tiếng Việt", localizer.GetLanguageDisplayName("vi"));
+    }
+
     [Fact]
     public void Instance_IsShared()
     {

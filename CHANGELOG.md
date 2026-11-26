@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.4
+
+- **NxtHUD now speaks Vietnamese.** Pick *Tiếng Việt* under Settings → General → Language, or
+  leave it on "Use system language" and NxtHUD switches by itself when Windows is in Vietnamese.
+  The settings window, flyouts, tray menu and update notices are all translated.
+- The README is also available in Vietnamese and Simplified Chinese.
+
 ## 1.4.3
 
 - **Fixed: the music widget on the taskbar stopped reacting to clicks.** It stays above the

@@ -100,7 +100,8 @@ No installer wanted? Download `NxtHUD-<version>-portable-x64.zip`, unzip it anyw
 - **Tray app** – single instance, Fluent tray menu, optional start with Windows, System / Light /
   Dark theme that follows Windows and its accent colour live.
 - **Update notices** – tells you once when a new release is out and takes you to its download.
-- **Localizable** – every string comes from a resx file; English ships first.
+- **English and Vietnamese** – pick the language in Settings → General, or let it follow Windows.
+  Every string comes from a resx file, so more languages are easy to add.
 
 ## 💻 Requirements
 
@@ -240,7 +241,7 @@ docs/promo/              README banner and cards: edit cards.html, run render.ps
 ## 🌍 Adding a language
 
 1. Copy `src/NxtHUD.Core/Resources/Strings.resx` to `Strings.<culture>.resx` (for example
-   `Strings.vi.resx`) and translate the values.
+   `Strings.fr.resx`) and translate the values. `Strings.vi.resx` is a finished example.
 2. Add the culture name to `Localizer.SupportedLanguages`.
 
 The language picker then offers it, and switching applies without a restart.
@@ -280,8 +281,6 @@ The language picker then offers it, and switching applies without a restart.
 - **Fullscreen detection** relies on the Windows notification state, which also reports a
   browser in F11 fullscreen as busy. Turn "Pause in fullscreen games" off to see flyouts there.
 - **Start with Windows** uses the per-user registry Run key.
-- **English only** for now; the structure for more languages is in place.
-
 - **Visualizer.** It listens to the default playback device as it was when playback started; after
   switching output devices it may stay flat until the next pause/play. It reacts to all system
   audio, not only the media player.
