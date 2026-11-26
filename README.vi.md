@@ -174,7 +174,7 @@ thay đổi gì đó (About → *Open folder* sẽ đưa bạn tới đó). Tệ
 được sẽ được sao lưu thành `settings.corrupt.json` và giá trị mặc định được dùng.
 
 Bảng dưới đây dùng tên trang trong giao diện tiếng Anh; ở giao diện tiếng Việt, chúng lần lượt là
-Chung, Cửa sổ nổi, Giao diện và Giới thiệu.
+Chung, Widget, Giao diện và Giới thiệu.
 
 | Trang | Tùy chọn |
 | --- | --- |

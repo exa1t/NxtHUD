@@ -32,7 +32,7 @@
     <value>Chung</value>
   </data>
   <data name="Nav_Flyouts" xml:space="preserve">
-    <value>Cửa sổ nổi</value>
+    <value>Widget</value>
   </data>
   <data name="Nav_Appearance" xml:space="preserve">
     <value>Giao diện</value>
@@ -43,13 +43,13 @@
 
   <!-- General page -->
   <data name="General_Error_Title" xml:space="preserve">
-    <value>Không thể thay đổi cài đặt khởi động</value>
+    <value>Không đổi được cài đặt khởi động</value>
   </data>
   <data name="General_StartWithWindows_Title" xml:space="preserve">
     <value>Khởi động cùng Windows</value>
   </data>
   <data name="General_StartWithWindows_Description" xml:space="preserve">
-    <value>Tự chạy NxtHUD ẩn trong khay hệ thống khi bạn đăng nhập.</value>
+    <value>Tự chạy NxtHUD dưới khay khi bạn đăng nhập.</value>
   </data>
   <data name="General_Language_Title" xml:space="preserve">
     <value>Ngôn ngữ</value>
@@ -58,57 +58,57 @@
     <value>Ngôn ngữ hiển thị của NxtHUD.</value>
   </data>
   <data name="General_DisableInFullscreen_Title" xml:space="preserve">
-    <value>Tạm dừng khi chơi game toàn màn hình</value>
+    <value>Tạm ẩn khi chơi game toàn màn hình</value>
   </data>
   <data name="General_DisableInFullscreen_Description" xml:space="preserve">
-    <value>Không hiện cửa sổ nổi khi đang mở game hoặc ứng dụng toàn màn hình.</value>
+    <value>Không hiện widget khi đang mở game hoặc app toàn màn hình.</value>
   </data>
   <data name="Language_System" xml:space="preserve">
-    <value>Dùng ngôn ngữ hệ thống</value>
+    <value>Theo ngôn ngữ hệ thống</value>
   </data>
 
   <!-- Flyouts page -->
   <data name="Flyouts_Section_Flyouts" xml:space="preserve">
-    <value>Cửa sổ nổi</value>
+    <value>Widget</value>
   </data>
   <data name="Flyouts_Section_Behavior" xml:space="preserve">
     <value>Hoạt động</value>
   </data>
   <data name="Flyouts_Media_Title" xml:space="preserve">
-    <value>Cửa sổ phát nhạc</value>
+    <value>Widget nhạc</value>
   </data>
   <data name="Flyouts_Media_Description" xml:space="preserve">
-    <value>Hiện bài đang phát kèm nút điều khiển khi bạn nhấn phím media.</value>
+    <value>Hiện bài đang phát và nút điều khiển khi bạn bấm phím media.</value>
   </data>
   <data name="Flyouts_Volume_Title" xml:space="preserve">
-    <value>Cửa sổ âm lượng</value>
+    <value>Widget âm lượng</value>
   </data>
   <data name="Flyouts_Volume_Description" xml:space="preserve">
-    <value>Hiện thanh âm lượng phong cách Fluent khi bạn nhấn phím âm lượng hoặc tắt tiếng.</value>
+    <value>Hiện thanh âm lượng kiểu Fluent khi bạn bấm phím âm lượng hoặc tắt tiếng.</value>
   </data>
   <data name="Flyouts_UpNext_Title" xml:space="preserve">
     <value>Bài tiếp theo</value>
   </data>
   <data name="Flyouts_UpNext_Description" xml:space="preserve">
-    <value>Thông báo ngắn bài mới khi bài hát tự chuyển.</value>
+    <value>Báo nhanh tên bài mới khi nhạc tự chuyển bài.</value>
   </data>
   <data name="Flyouts_LockKeys_Title" xml:space="preserve">
-    <value>Cửa sổ phím khóa</value>
+    <value>Widget phím khóa</value>
   </data>
   <data name="Flyouts_LockKeys_Description" xml:space="preserve">
-    <value>Hiện trạng thái Caps Lock, Num Lock và Scroll Lock khi bạn bật hoặc tắt chúng.</value>
+    <value>Hiện trạng thái Caps Lock, Num Lock và Scroll Lock mỗi khi bạn bật/tắt.</value>
   </data>
   <data name="Flyouts_TaskbarWidget_Title" xml:space="preserve">
-    <value>Widget trên thanh tác vụ</value>
+    <value>Widget trên taskbar</value>
   </data>
   <data name="Flyouts_TaskbarWidget_Description" xml:space="preserve">
-    <value>Gắn một widget đang phát nhỏ gọn lên thanh tác vụ. Bấm vào để mở cửa sổ phát nhạc.</value>
+    <value>Gắn một widget nhỏ hiện bài đang phát lên taskbar. Bấm vào để mở widget nhạc.</value>
   </data>
   <data name="Flyouts_Timeout_Title" xml:space="preserve">
-    <value>Ẩn sau</value>
+    <value>Tự ẩn sau</value>
   </data>
   <data name="Flyouts_Timeout_Description" xml:space="preserve">
-    <value>Thời gian cửa sổ nổi hiển thị trước khi tự ẩn.</value>
+    <value>Widget hiện trên màn hình bao lâu thì tự ẩn.</value>
   </data>
 
   <!-- Media flyout -->
@@ -116,10 +116,10 @@
     <value>Bài trước</value>
   </data>
   <data name="Media_PlayPause" xml:space="preserve">
-    <value>Phát hoặc tạm dừng</value>
+    <value>Phát / tạm dừng</value>
   </data>
   <data name="Media_Next" xml:space="preserve">
-    <value>Bài tiếp</value>
+    <value>Bài sau</value>
   </data>
 
   <!-- Appearance page -->
@@ -127,62 +127,62 @@
     <value>Kiểu dáng</value>
   </data>
   <data name="Appearance_Section_Layout" xml:space="preserve">
-    <value>Bố cục và chuyển động</value>
+    <value>Bố cục và hiệu ứng</value>
   </data>
   <data name="Appearance_Theme_Title" xml:space="preserve">
-    <value>Chủ đề ứng dụng</value>
+    <value>Chủ đề</value>
   </data>
   <data name="Appearance_Theme_Description" xml:space="preserve">
-    <value>Theo Windows, hoặc luôn dùng chế độ sáng hay tối.</value>
+    <value>Theo Windows, hoặc luôn dùng nền sáng hay nền tối.</value>
   </data>
   <data name="Appearance_Backdrop_Title" xml:space="preserve">
-    <value>Chất liệu nền</value>
+    <value>Hiệu ứng nền</value>
   </data>
   <data name="Appearance_Backdrop_Description" xml:space="preserve">
-    <value>Chất liệu hiển thị phía sau cửa sổ nổi và cửa sổ này. Mica và Acrylic cần Windows 11 22H2 trở lên.</value>
+    <value>Hiệu ứng nền phía sau widget và cửa sổ này. Mica và Acrylic cần Windows 11 22H2 trở lên.</value>
   </data>
   <data name="Appearance_Position_Title" xml:space="preserve">
-    <value>Vị trí cửa sổ phát nhạc</value>
+    <value>Vị trí widget nhạc</value>
   </data>
   <data name="Appearance_Position_Description" xml:space="preserve">
-    <value>Nơi cửa sổ phát nhạc xuất hiện. Các cửa sổ nổi khác có cài đặt riêng trong trang Cửa sổ nổi.</value>
+    <value>Chỗ widget nhạc hiện ra. Các widget khác chỉnh vị trí riêng ở trang Widget.</value>
   </data>
   <data name="Appearance_Compact_Title" xml:space="preserve">
     <value>Bố cục gọn</value>
   </data>
   <data name="Appearance_Compact_Description" xml:space="preserve">
-    <value>Dùng cửa sổ nổi nhỏ hơn, ít khoảng trống hơn.</value>
+    <value>Widget nhỏ hơn, ít khoảng trống hơn.</value>
   </data>
   <data name="Appearance_AnimationSpeed_Title" xml:space="preserve">
     <value>Tốc độ hiệu ứng</value>
   </data>
   <data name="Appearance_AnimationSpeed_Description" xml:space="preserve">
-    <value>Tốc độ trượt và mờ dần của cửa sổ nổi.</value>
+    <value>Widget trượt vào và mờ đi nhanh hay chậm.</value>
   </data>
 
   <!-- Flyouts page (additions) -->
   <data name="Flyouts_Position_Tooltip" xml:space="preserve">
-    <value>Vị trí xuất hiện của cửa sổ này</value>
+    <value>Vị trí hiện widget này</value>
   </data>
   <data name="Flyouts_ReplaceNative_Title" xml:space="preserve">
-    <value>Thay lớp phủ âm lượng của Windows</value>
+    <value>Thay widget âm lượng của Windows</value>
   </data>
   <data name="Flyouts_ReplaceNative_Description" xml:space="preserve">
-    <value>Để NxtHUD xử lý phím âm lượng, tránh việc lớp phủ có sẵn của Windows cũng hiện ra.</value>
+    <value>Để NxtHUD xử lý phím âm lượng, widget âm lượng mặc định của Windows sẽ không hiện thêm nữa.</value>
   </data>
   <data name="Flyouts_WidgetOffset_Title" xml:space="preserve">
-    <value>Khoảng lệch của widget</value>
+    <value>Dịch widget taskbar sang phải</value>
   </data>
   <data name="Flyouts_WidgetOffset_Description" xml:space="preserve">
-    <value>Khoảng cách từ đầu bên trái thanh tác vụ. Tăng lên nếu widget che nút Tiện ích (Widgets).</value>
+    <value>Khoảng cách tính từ mép trái taskbar. Tăng lên nếu widget taskbar đè lên nút Widgets.</value>
   </data>
 
   <!-- Appearance page (additions) -->
   <data name="Appearance_Display_Title" xml:space="preserve">
-    <value>Hiện cửa sổ nổi trên</value>
+    <value>Hiện widget trên</value>
   </data>
   <data name="Appearance_Display_Description" xml:space="preserve">
-    <value>Màn hình hiện cửa sổ nổi khi bạn dùng nhiều màn hình.</value>
+    <value>Chọn màn hình hiện widget khi bạn dùng nhiều màn hình.</value>
   </data>
 
   <!-- Other flyouts and the taskbar widget -->
@@ -190,7 +190,7 @@
     <value>Tiếp theo</value>
   </data>
   <data name="Widget_Open" xml:space="preserve">
-    <value>Mở cửa sổ phát nhạc</value>
+    <value>Mở widget nhạc</value>
   </data>
   <data name="LockKeys_CapsLock_On" xml:space="preserve">
     <value>Caps Lock đang bật</value>
@@ -213,35 +213,35 @@
 
   <!-- About page -->
   <data name="About_Description" xml:space="preserve">
-    <value>Tiện ích khay hệ thống nhẹ, hiển thị cửa sổ nổi phong cách Fluent cho nhạc và bàn phím.</value>
+    <value>Tiện ích taskbar nhẹ, hiện widget kiểu Fluent cho nhạc và các phím trên bàn phím.</value>
   </data>
   <data name="About_Version" xml:space="preserve">
     <value>Phiên bản</value>
   </data>
   <data name="About_SettingsFile_Title" xml:space="preserve">
-    <value>Tệp cài đặt</value>
+    <value>File cài đặt</value>
   </data>
   <data name="About_OpenFolder" xml:space="preserve">
     <value>Mở thư mục</value>
   </data>
   <data name="About_Reset_Title" xml:space="preserve">
-    <value>Đặt lại cài đặt</value>
+    <value>Khôi phục cài đặt</value>
   </data>
   <data name="About_Reset_Description" xml:space="preserve">
-    <value>Khôi phục mọi tùy chọn về giá trị mặc định.</value>
+    <value>Đưa mọi tùy chọn về mặc định.</value>
   </data>
   <data name="About_Reset_Button" xml:space="preserve">
-    <value>Đặt lại</value>
+    <value>Khôi phục</value>
   </data>
 
   <!-- Errors -->
   <data name="Error_StartupFailed" xml:space="preserve">
-    <value>NxtHUD không thể khởi động. Chi tiết đã được ghi vào tệp nhật ký.</value>
+    <value>NxtHUD không khởi động được. Chi tiết đã được ghi vào log.</value>
   </data>
 
   <!-- Enum labels: Enum_<Type>_<Value> -->
   <data name="Enum_AppTheme_System" xml:space="preserve">
-    <value>Theo cài đặt hệ thống</value>
+    <value>Theo hệ thống</value>
   </data>
   <data name="Enum_AppTheme_Light" xml:space="preserve">
     <value>Sáng</value>
@@ -256,7 +256,7 @@
     <value>Acrylic</value>
   </data>
   <data name="Enum_BackdropKind_None" xml:space="preserve">
-    <value>Không có</value>
+    <value>Không dùng</value>
   </data>
   <data name="Enum_FlyoutVerticalPosition_Top" xml:space="preserve">
     <value>Trên</value>
@@ -280,73 +280,73 @@
     <value>Nhanh</value>
   </data>
   <data name="Enum_AnimationSpeed_Normal" xml:space="preserve">
-    <value>Bình thường</value>
+    <value>Vừa</value>
   </data>
   <data name="Enum_AnimationSpeed_Slow" xml:space="preserve">
     <value>Chậm</value>
   </data>
   <data name="Enum_FlyoutPosition_TopLeft" xml:space="preserve">
-    <value>Góc trên bên trái</value>
+    <value>Trên cùng bên trái</value>
   </data>
   <data name="Enum_FlyoutPosition_TopCenter" xml:space="preserve">
-    <value>Giữa phía trên</value>
+    <value>Trên cùng ở giữa</value>
   </data>
   <data name="Enum_FlyoutPosition_TopRight" xml:space="preserve">
-    <value>Góc trên bên phải</value>
+    <value>Trên cùng bên phải</value>
   </data>
   <data name="Enum_FlyoutPosition_BottomLeft" xml:space="preserve">
-    <value>Góc dưới bên trái</value>
+    <value>Dưới cùng bên trái</value>
   </data>
   <data name="Enum_FlyoutPosition_BottomCenter" xml:space="preserve">
-    <value>Giữa phía dưới</value>
+    <value>Dưới cùng ở giữa</value>
   </data>
   <data name="Enum_FlyoutPosition_BottomRight" xml:space="preserve">
-    <value>Góc dưới bên phải</value>
+    <value>Dưới cùng bên phải</value>
   </data>
   <data name="Enum_FlyoutDisplay_Primary" xml:space="preserve">
     <value>Màn hình chính</value>
   </data>
   <data name="Enum_FlyoutDisplay_Cursor" xml:space="preserve">
-    <value>Màn hình có con trỏ chuột</value>
+    <value>Màn hình đang có chuột</value>
   </data>
   <data name="Enum_FlyoutDisplay_ActiveWindow" xml:space="preserve">
-    <value>Màn hình có cửa sổ đang dùng</value>
+    <value>Màn hình đang dùng</value>
   </data>
   <data name="Flyouts_Visualizer_Title" xml:space="preserve">
-    <value>Hiệu ứng sóng nhạc</value>
+    <value>Sóng nhạc trên taskbar</value>
   </data>
   <data name="Flyouts_Visualizer_Description" xml:space="preserve">
-    <value>Các cột chuyển động cạnh widget trên thanh tác vụ, nhảy theo nhạc.</value>
+    <value>Các cột nhảy theo nhạc, nằm cạnh widget trên taskbar.</value>
   </data>
   <data name="Flyouts_VisualizerBars_Title" xml:space="preserve">
     <value>Số cột sóng nhạc</value>
   </data>
   <data name="Flyouts_VisualizerBars_Description" xml:space="preserve">
-    <value>Số cột mà hiệu ứng sóng nhạc vẽ ra.</value>
+    <value>Sóng nhạc có bao nhiêu cột.</value>
   </data>
   <data name="Flyouts_VisualizerColor_Title" xml:space="preserve">
     <value>Màu sóng nhạc</value>
   </data>
   <data name="Flyouts_VisualizerColor_Description" xml:space="preserve">
-    <value>Theo màu chữ của thanh tác vụ, dùng màu nhấn của Windows, hoặc tự nhập mã màu dạng #RRGGBB.</value>
+    <value>Theo màu chữ trên taskbar, theo màu nhấn của Windows, hoặc tự nhập mã màu dạng #RRGGBB.</value>
   </data>
   <data name="Enum_VisualizerColorMode_Auto" xml:space="preserve">
-    <value>Theo thanh tác vụ</value>
+    <value>Theo taskbar</value>
   </data>
   <data name="Enum_VisualizerColorMode_Accent" xml:space="preserve">
     <value>Màu nhấn</value>
   </data>
   <data name="Enum_VisualizerColorMode_Custom" xml:space="preserve">
-    <value>Tùy chỉnh</value>
+    <value>Tự chọn</value>
   </data>
   <data name="Media_SourceAppIcon" xml:space="preserve">
-    <value>Biểu tượng trình phát</value>
+    <value>Icon trình phát</value>
   </data>
   <data name="Flyouts_VisualizerDirection_Title" xml:space="preserve">
     <value>Hướng sóng nhạc</value>
   </data>
   <data name="Flyouts_VisualizerDirection_Description" xml:space="preserve">
-    <value>Cho các cột mọc từ giữa ra, từ dưới lên hoặc từ trên xuống.</value>
+    <value>Cột mọc từ giữa ra, từ dưới lên hay từ trên xuống.</value>
   </data>
   <data name="Enum_VisualizerAlignment_Center" xml:space="preserve">
     <value>Từ giữa ra</value>
@@ -358,46 +358,46 @@
     <value>Từ trên xuống</value>
   </data>
   <data name="Enum_BackdropKind_Translucent" xml:space="preserve">
-    <value>Bán trong suốt (dùng được khi tiết kiệm năng lượng)</value>
+    <value>Trong mờ (dùng được khi bật tiết kiệm pin)</value>
   </data>
   <data name="Appearance_TranslucentOpacity_Title" xml:space="preserve">
-    <value>Độ đậm của nền bán trong suốt</value>
+    <value>Độ đục của nền trong mờ</value>
   </data>
   <data name="Appearance_TranslucentOpacity_Description" xml:space="preserve">
-    <value>Độ đậm của nền cửa sổ nổi khi dùng nền Bán trong suốt. Giá trị càng thấp càng nhìn rõ phía sau.</value>
+    <value>Nền widget đục cỡ nào khi dùng hiệu ứng Trong mờ. Càng thấp càng thấy rõ phía sau.</value>
   </data>
   <data name="Flyouts_Section_TaskbarStats" xml:space="preserve">
-    <value>Thông số trên thanh tác vụ</value>
+    <value>Thông số trên taskbar</value>
   </data>
   <data name="Flyouts_TaskbarStats_Title" xml:space="preserve">
-    <value>Hiện thông số hệ thống trên thanh tác vụ</value>
+    <value>Hiện thông số máy trên taskbar</value>
   </data>
   <data name="Flyouts_TaskbarStats_Description" xml:space="preserve">
-    <value>Số liệu CPU, bộ nhớ, GPU, mạng và ổ đĩa trong khoảng trống cạnh các biểu tượng thông báo. Bấm vào để mở Trình quản lý Tác vụ.</value>
+    <value>CPU, RAM, GPU, mạng và ổ đĩa, hiện ở chỗ trống cạnh khay. Bấm vào để mở Task Manager.</value>
   </data>
   <data name="Flyouts_StatsItems_Title" xml:space="preserve">
-    <value>Số liệu hiển thị</value>
+    <value>Thông số hiển thị</value>
   </data>
   <data name="Flyouts_StatsItems_Description" xml:space="preserve">
-    <value>Bộ nhớ GPU và nhiệt độ GPU chỉ hiện khi driver đồ họa của bạn hỗ trợ.</value>
+    <value>VRAM và nhiệt độ GPU chỉ hiện khi driver card đồ họa có hỗ trợ.</value>
   </data>
   <data name="Flyouts_StatsInterval_Title" xml:space="preserve">
-    <value>Làm mới mỗi</value>
+    <value>Cập nhật mỗi</value>
   </data>
   <data name="Flyouts_StatsInterval_Description" xml:space="preserve">
-    <value>Tần suất cập nhật số liệu. Càng nhanh càng tốn thêm một chút CPU.</value>
+    <value>Thông số được cập nhật bao lâu một lần. Càng nhanh càng tốn thêm chút CPU.</value>
   </data>
   <data name="Stats_Cpu" xml:space="preserve">
     <value>CPU</value>
   </data>
   <data name="Stats_Ram" xml:space="preserve">
-    <value>Bộ nhớ</value>
+    <value>RAM</value>
   </data>
   <data name="Stats_Gpu" xml:space="preserve">
     <value>GPU</value>
   </data>
   <data name="Stats_Vram" xml:space="preserve">
-    <value>Bộ nhớ GPU</value>
+    <value>VRAM</value>
   </data>
   <data name="Stats_GpuTemperature" xml:space="preserve">
     <value>Nhiệt độ GPU</value>
@@ -409,25 +409,25 @@
     <value>Ổ đĩa</value>
   </data>
   <data name="Stats_Open_Tooltip" xml:space="preserve">
-    <value>Mở Trình quản lý Tác vụ</value>
+    <value>Mở Task Manager</value>
   </data>
   <data name="About_Updates_Title" xml:space="preserve">
     <value>Kiểm tra cập nhật</value>
   </data>
   <data name="About_Updates_Description" xml:space="preserve">
-    <value>Tìm bản NxtHUD mới hơn trên GitHub khi khởi động và mỗi ngày một lần.</value>
+    <value>Kiểm tra bản NxtHUD mới trên GitHub mỗi khi mở máy và mỗi ngày một lần.</value>
   </data>
   <data name="About_Updates_Checking" xml:space="preserve">
     <value>Đang kiểm tra cập nhật…</value>
   </data>
   <data name="About_Updates_UpToDate" xml:space="preserve">
-    <value>Bạn đang dùng phiên bản mới nhất.</value>
+    <value>Bạn đang dùng bản mới nhất.</value>
   </data>
   <data name="About_Updates_Available" xml:space="preserve">
     <value>Đã có NxtHUD {0}.</value>
   </data>
   <data name="About_Updates_Failed" xml:space="preserve">
-    <value>Không thể kiểm tra cập nhật. Hãy kiểm tra kết nối mạng rồi thử lại.</value>
+    <value>Không kiểm tra được cập nhật. Bạn xem lại kết nối mạng rồi thử lại.</value>
   </data>
   <data name="About_Updates_CheckNow" xml:space="preserve">
     <value>Kiểm tra ngay</value>

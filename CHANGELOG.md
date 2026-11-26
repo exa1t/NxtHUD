@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.5
+
+- **Smoother Vietnamese.** The Vietnamese translation now reads the way people actually talk
+  about their PC, keeping everyday tech words in English: taskbar, widget, log, RAM, VRAM,
+  driver and Task Manager.
+
 ## 1.4.4
 
 - **NxtHUD now speaks Vietnamese.** Pick *Tiếng Việt* under Settings → General → Language, or
